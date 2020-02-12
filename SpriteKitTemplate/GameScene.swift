@@ -35,11 +35,6 @@ class GameScene: SKScene {
         } catch {
             // Do nothing if the sound file could not be played
         }
-        
-        // Add a node and try flipping it
-        let card = SKSpriteNode(imageNamed: "3S")
-        card.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
-        self.addChild(card)
     
     }
         

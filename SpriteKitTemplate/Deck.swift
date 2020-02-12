@@ -9,7 +9,7 @@
 import Foundation
 
 // A deck of cards
-struct Deck {
+class Deck {
     
     // Properties
     var cards : [Card]
@@ -55,7 +55,7 @@ struct Deck {
     }
     
     // Randomly deals out the specified number of cards
-    mutating func randomlyDealOut(thisManyCards cardsToDeal : Int) -> [Card]? {
+    func randomlyDealOut(thisManyCards cardsToDeal : Int) -> [Card]? {
         
         // Track cards left to deal
         var cardsLeftToDeal = cardsToDeal

@@ -9,11 +9,17 @@
 import Foundation
 
 // Create a new datatype to represent a playing card
-struct Card {
+class Card {
 
     // Properties
     var suit: Suit
     var rank: Rank
+    
+    // Initializer
+    init(suit: Suit, rank: Rank) {
+        self.suit = suit
+        self.rank = rank
+    }
     
     // Does the value for this card beat another card?
     //

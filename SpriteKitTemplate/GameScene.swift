@@ -35,7 +35,44 @@ class GameScene: SKScene {
         } catch {
             // Do nothing if the sound file could not be played
         }
+        
+        // Add a node and try flipping it
+        let card = SKSpriteNode(imageNamed: "3S")
+        card.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        self.addChild(card)
+    
+    }
+        
+    func touchDown(atPoint pos : CGPoint) {
 
+    }
+    
+    func touchMoved(toPoint pos : CGPoint) {
+
+    }
+    
+    func touchUp(atPoint pos : CGPoint) {
+
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        self.touchDown(atPoint: event.location(in: self))
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        self.touchMoved(toPoint: event.location(in: self))
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        self.touchUp(atPoint: event.location(in: self))
+    }
+    
+    // Responds when a key is down
+    override func keyDown(with event: NSEvent) {
+        switch event.keyCode {
+        default:
+            print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
+        }
     }
     
     // This runs before each frame is rendered
@@ -43,5 +80,5 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
-    
+
 }

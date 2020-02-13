@@ -31,13 +31,13 @@ class GameScene: SKScene {
         // Attempt to open and play the file at the given URL
         do {
             backgroundMusic = try AVAudioPlayer(contentsOf: backgroundMusicFileURL)
-            backgroundMusic?.play()
+            //backgroundMusic?.play()
         } catch {
             // Do nothing if the sound file could not be played
         }
         
         // Add a card node
-        let card = CardNode(suit: .hearts, rank: .jack)
+        let card = Card(suit: .hearts, rank: .jack)
         card.node.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         self.addChild(card.node)
         

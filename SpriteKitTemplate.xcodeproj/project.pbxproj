@@ -14,6 +14,7 @@
 		0E11976D23F4BFCD003B34AE /* Suit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E11976823F4BFCD003B34AE /* Suit.swift */; };
 		0E38C5DD23EC8E12006BB619 /* background.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0E38C5DC23EC8E12006BB619 /* background.wav */; };
 		0EE907DF23FF12E4000FAE5B /* SKCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE907DE23FF12E4000FAE5B /* SKCard.swift */; };
+		0EE907E323FF1B1F000FAE5B /* SKHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE907E223FF1B1F000FAE5B /* SKHand.swift */; };
 		0EF3302A23A0433100A83858 /* Fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0EF3302923A0433100A83858 /* Fire.sks */; };
 		81279437239BEC4C000EBED0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81279436239BEC4C000EBED0 /* AppDelegate.swift */; };
 		8127943D239BEC4C000EBED0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8127943C239BEC4C000EBED0 /* GameScene.swift */; };
@@ -30,6 +31,7 @@
 		0E11976823F4BFCD003B34AE /* Suit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suit.swift; sourceTree = "<group>"; };
 		0E38C5DC23EC8E12006BB619 /* background.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = background.wav; sourceTree = "<group>"; };
 		0EE907DE23FF12E4000FAE5B /* SKCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKCard.swift; sourceTree = "<group>"; };
+		0EE907E223FF1B1F000FAE5B /* SKHand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKHand.swift; sourceTree = "<group>"; };
 		0EF3302923A0433100A83858 /* Fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fire.sks; sourceTree = "<group>"; };
 		81279433239BEC4C000EBED0 /* SpriteKitTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpriteKitTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81279436239BEC4C000EBED0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				0E11976623F4BFCD003B34AE /* Rank.swift */,
 				0E11976823F4BFCD003B34AE /* Suit.swift */,
 				0EE907DE23FF12E4000FAE5B /* SKCard.swift */,
+				0EE907E223FF1B1F000FAE5B /* SKHand.swift */,
 			);
 			path = SpriteKitTemplate;
 			sourceTree = "<group>";
@@ -170,6 +173,7 @@
 				8127943F239BEC4C000EBED0 /* ViewController.swift in Sources */,
 				0E11976A23F4BFCD003B34AE /* Card.swift in Sources */,
 				0EE907DF23FF12E4000FAE5B /* SKCard.swift in Sources */,
+				0EE907E323FF1B1F000FAE5B /* SKHand.swift in Sources */,
 				0E11976B23F4BFCD003B34AE /* Rank.swift in Sources */,
 				8127943D239BEC4C000EBED0 /* GameScene.swift in Sources */,
 				81279437239BEC4C000EBED0 /* AppDelegate.swift in Sources */,

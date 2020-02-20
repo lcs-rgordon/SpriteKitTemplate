@@ -23,11 +23,10 @@ class ViewController: NSViewController {
         //      Choose Product > Clean Build Folder
         //
         // ... to be sure Xcode picks up the window size change, if you change it.
-        self.skView.frame = NSRect(x: 0, y: 0, width: 800, height: 600)
+        self.skView.frame = NSRect(x: 0, y: 0, width: 1200, height: 800)
 
         // Create a scene based on the GameScene class (in GameScene.swift)
-        // Scene size is a bit smaller but will scale up to fill the window
-        let sceneSize = CGSize(width: 800, height: 600)
+        let sceneSize = CGSize(width: 1200, height: 800)
         let scene = GameScene(size: sceneSize)
         scene.scaleMode = .aspectFill
         

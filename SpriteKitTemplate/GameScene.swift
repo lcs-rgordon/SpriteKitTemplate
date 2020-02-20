@@ -37,7 +37,7 @@ class GameScene: SKScene {
         }
         
         // Add a card node
-        let card = Card(suit: .hearts, rank: .jack)
+        let card = SKCard(suit: .hearts, rank: .jack)
         card.node.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         self.addChild(card.node)
         

@@ -67,12 +67,29 @@ class GameScene: SKScene {
         self.addChild(playerTwo)
         print(playerTwo.position.y)
         
+        // Add an edge loop body around the scene
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+
+        // No gravity in the scene
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+
         // Add a ball
         ball = SKShapeNode(circleOfRadius: 15)
         ball.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         ball.fillColor = NSColor.white
         self.addChild(ball)
-                    
+
+        // Give the ball a physics body
+        ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.frame.width * 0.5)
+        
+        // Ball does not lose any momentum when hitting edge of scene
+        ball.physicsBody?.restitution = 1.0
+        print(ball.physicsBody?.mass)
+        
+        // Move the ball
+        let initialMovement = SKAction.applyImpulse(CGVector(dx: -10, dy: -10), duration: 0.001)
+        ball.run(initialMovement)
+
     }
         
     func touchDown(atPoint pos : CGPoint) {

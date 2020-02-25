@@ -15,15 +15,26 @@ class GameScene: SKScene {
     // Background music player
     var backgroundMusic: AVAudioPlayer?
     
+    // Height of a player
+    let playerHeight: CGFloat = 100
+    
+    // Player nodes
+    var leftPlayer: SKShapeNode = SKShapeNode()
+    
     // This function runs once to set up the scene
     override func didMove(to view: SKView) {
         
         // Set the background colour to a dark green (HSB)
         // See: http://colorizer.org to find color values
-        self.backgroundColor = NSColor(hue: 102/360, saturation: 86/100, brightness: 24/100, alpha: 1)
+        self.backgroundColor = NSColor.black
         
-        // Play background music
-        playBackgroundMusic()
+        // No background music to start
+        backgroundMusic = nil
+        
+        // Add the left-hand player
+        leftPlayer = SKShapeNode(rect: CGRect(x: 50, y: self.size.height / 2 - playerHeight / 2, width: 25, height: 100))
+        leftPlayer.fillColor = NSColor.white
+        self.addChild(leftPlayer)
             
     }
         

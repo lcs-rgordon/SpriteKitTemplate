@@ -21,6 +21,14 @@ class GameScene: SKScene {
     // Player nodes
     var leftPlayer: SKShapeNode = SKShapeNode()
     
+    // Track intervals between frame updates
+    // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
+    // ... for game loop illustration
+    // We cannot count on update(_:) being called with a consistent elapsed time between frame draws.
+    // So we track how much time has elapsed since the last update, so that movement appears smooth
+    var lastUpdateTime: TimeInterval = 0    // The time at which the last update occured
+    var deltaTime: TimeInterval = 0         // Change in time since last update
+    
     // This function runs once to set up the scene
     override func didMove(to view: SKView) {
         
@@ -74,6 +82,15 @@ class GameScene: SKScene {
     // Avoid putting computationally intense code in this function to maintain high performance
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+                
+        if lastUpdateTime > 0 {
+            // Update to reflect time elapsed since the last call to update(_:)
+            deltaTime = currentTime - lastUpdateTime
+        }
+        // Log the time of this most recent time update
+        lastUpdateTime = currentTime
+        print("\(deltaTime * 1000) milliseconds since last update")
+        
     }
     
     func playBackgroundMusic() {

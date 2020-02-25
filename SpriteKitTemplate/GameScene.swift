@@ -10,6 +10,13 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
+class Player: SKShapeNode {
+    
+    // Will control which direction the shape moves in
+    var velocity : CGPoint = CGPoint(x: 0, y: 0)
+    
+}
+
 class GameScene: SKScene {
     
     // Background music player
@@ -20,10 +27,9 @@ class GameScene: SKScene {
     
     // Player movement properties
     let playerMovementPerSecond: CGFloat = 150   // 50 points per second
-    var playerOneMovementVector: CGPoint = CGPoint(x: 0, y: 0) // Not moving to start
     
     // Player nodes
-    var playerOne: SKShapeNode = SKShapeNode()
+    var playerOne: Player = Player()
     
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
@@ -44,9 +50,12 @@ class GameScene: SKScene {
         backgroundMusic = nil
         
         // Add the left-hand player (player one)
-        playerOne = SKShapeNode(rect: CGRect(x: 50, y: self.size.height / 2 - playerHeight / 2, width: 25, height: 100))
+        playerOne = Player(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
+        playerOne.position = CGPoint(x: 50, y: self.size.height / 2 - playerOne.frame.height / 2)
         playerOne.fillColor = NSColor.white
         self.addChild(playerOne)
+        print(playerOne.position.y)
+
             
     }
         
@@ -79,10 +88,10 @@ class GameScene: SKScene {
         switch event.keyCode {
         case 13:
             // W or w key
-            playerOneMovementVector = CGPoint(x: 0, y: playerMovementPerSecond)
+            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
         case 1:
             // S or s key
-            playerOneMovementVector = CGPoint(x: 0, y: playerMovementPerSecond *  -1)
+            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond *  -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }
@@ -94,7 +103,8 @@ class GameScene: SKScene {
         // Called before each frame is rendered
                 
         trackTimeElapsed(to: currentTime)
-        move(sprite: playerOne, velocity: playerOneMovementVector)
+        checkForBoundaryReversal(on: playerOne)
+        move(sprite: playerOne)
         
     }
 
@@ -112,14 +122,28 @@ class GameScene: SKScene {
     }
     
     // Move the player's paddle by a fraction of the desired movement per second, based on time since last frame draw
-    func move(sprite: SKShapeNode, velocity: CGPoint) {
+    func move(sprite: Player) {
         
         // How much of the desired movement in a second should the player move for this frame?
-        let amountToMove = CGPoint(x: velocity.x * CGFloat(deltaTime), y: velocity.y * CGFloat(deltaTime))
+        let amountToMove = CGPoint(x: sprite.velocity.x * CGFloat(deltaTime), y: sprite.velocity.y * CGFloat(deltaTime))
         
         // Actually move the sprite
         sprite.position = CGPoint(x: sprite.position.x + amountToMove.x,
                                   y: sprite.position.y + amountToMove.y)
+        
+    }
+    
+    // This checks to see if a player is at the upper or lower boundary, and if so, reverses their movement vector
+    func checkForBoundaryReversal(on player: Player) {
+        
+        // Top of screen, change to moving down
+        // OR
+        // Bottom of screen, change to moving up
+        if player.position.y + player.frame.height > self.size.height ||
+            player.position.y < 0
+            {
+                player.velocity = CGPoint(x: 0, y: player.velocity.y * -1)
+        }
         
     }
     

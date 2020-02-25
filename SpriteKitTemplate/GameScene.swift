@@ -30,7 +30,8 @@ class GameScene: SKScene {
     
     // Player nodes
     var playerOne: Player = Player()
-    
+    var playerTwo: Player = Player()
+
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
     // ... for game loop illustration
@@ -56,6 +57,12 @@ class GameScene: SKScene {
         self.addChild(playerOne)
         print(playerOne.position.y)
 
+        // Add the right-hand player (player two)
+        playerTwo = Player(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
+        playerTwo.position = CGPoint(x: self.size.width - 50 - playerOne.frame.width, y: self.size.height / 2 - playerTwo.frame.height / 2)
+        playerTwo.fillColor = NSColor.white
+        self.addChild(playerTwo)
+        print(playerTwo.position.y)
             
     }
         
@@ -91,7 +98,13 @@ class GameScene: SKScene {
             playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
         case 1:
             // S or s key
-            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond *  -1)
+            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
+        case 126:
+            // Up arrow
+            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
+        case 125:
+            // Down arrow
+            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }
@@ -105,7 +118,9 @@ class GameScene: SKScene {
         trackTimeElapsed(to: currentTime)
         checkForBoundaryReversal(on: playerOne)
         move(sprite: playerOne)
-        
+        checkForBoundaryReversal(on: playerTwo)
+        move(sprite: playerTwo)
+
     }
 
     // How much time has elapsed since the last frame was drawn?

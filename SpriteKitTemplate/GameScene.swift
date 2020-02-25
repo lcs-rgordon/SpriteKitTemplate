@@ -18,6 +18,9 @@ class GameScene: SKScene {
     // Height of a player
     let playerHeight: CGFloat = 100
     
+    // Player movement speed
+    let playerMovementPerSecond: CGFloat = 150   // 50 points per second
+    
     // Player nodes
     var leftPlayer: SKShapeNode = SKShapeNode()
     
@@ -83,6 +86,14 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
                 
+        trackTimeElapsed(to: currentTime)
+        move(sprite: leftPlayer, velocity: CGPoint(x: 0, y: playerMovementPerSecond))
+        
+    }
+
+    // How much time has elapsed since the last frame was drawn?
+    func trackTimeElapsed(to currentTime: TimeInterval) {
+        
         if lastUpdateTime > 0 {
             // Update to reflect time elapsed since the last call to update(_:)
             deltaTime = currentTime - lastUpdateTime
@@ -90,6 +101,18 @@ class GameScene: SKScene {
         // Log the time of this most recent time update
         lastUpdateTime = currentTime
         print("\(deltaTime * 1000) milliseconds since last update")
+
+    }
+    
+    // Move the player's paddle by a fraction of the desired movement per second, based on time since last frame draw
+    func move(sprite: SKShapeNode, velocity: CGPoint) {
+        
+        // How much of the desired movement in a second should the player move for this frame?
+        let amountToMove = CGPoint(x: velocity.x * CGFloat(deltaTime), y: velocity.y * CGFloat(deltaTime))
+        
+        // Actually move the sprite
+        sprite.position = CGPoint(x: sprite.position.x + amountToMove.x,
+                                  y: sprite.position.y + amountToMove.y)
         
     }
     

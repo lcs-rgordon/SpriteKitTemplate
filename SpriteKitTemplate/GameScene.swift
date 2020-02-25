@@ -31,6 +31,9 @@ class GameScene: SKScene {
     // Player nodes
     var playerOne: Player = Player()
     var playerTwo: Player = Player()
+    
+    // Ball node
+    var ball = SKShapeNode()
 
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
@@ -56,14 +59,20 @@ class GameScene: SKScene {
         playerOne.fillColor = NSColor.white
         self.addChild(playerOne)
         print(playerOne.position.y)
-
+        
         // Add the right-hand player (player two)
         playerTwo = Player(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
         playerTwo.position = CGPoint(x: self.size.width - 50 - playerOne.frame.width, y: self.size.height / 2 - playerTwo.frame.height / 2)
         playerTwo.fillColor = NSColor.white
         self.addChild(playerTwo)
         print(playerTwo.position.y)
-            
+        
+        // Add a ball
+        ball = SKShapeNode(circleOfRadius: 15)
+        ball.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        ball.fillColor = NSColor.white
+        self.addChild(ball)
+                    
     }
         
     func touchDown(atPoint pos : CGPoint) {

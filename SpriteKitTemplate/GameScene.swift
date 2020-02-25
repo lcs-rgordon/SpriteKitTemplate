@@ -18,11 +18,12 @@ class GameScene: SKScene {
     // Height of a player
     let playerHeight: CGFloat = 100
     
-    // Player movement speed
+    // Player movement properties
     let playerMovementPerSecond: CGFloat = 150   // 50 points per second
+    var playerOneMovementVector: CGPoint = CGPoint(x: 0, y: 0) // Not moving to start
     
     // Player nodes
-    var leftPlayer: SKShapeNode = SKShapeNode()
+    var playerOne: SKShapeNode = SKShapeNode()
     
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
@@ -42,10 +43,10 @@ class GameScene: SKScene {
         // No background music to start
         backgroundMusic = nil
         
-        // Add the left-hand player
-        leftPlayer = SKShapeNode(rect: CGRect(x: 50, y: self.size.height / 2 - playerHeight / 2, width: 25, height: 100))
-        leftPlayer.fillColor = NSColor.white
-        self.addChild(leftPlayer)
+        // Add the left-hand player (player one)
+        playerOne = SKShapeNode(rect: CGRect(x: 50, y: self.size.height / 2 - playerHeight / 2, width: 25, height: 100))
+        playerOne.fillColor = NSColor.white
+        self.addChild(playerOne)
             
     }
         
@@ -76,6 +77,12 @@ class GameScene: SKScene {
     // Responds when a key is down
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
+        case 13:
+            // W or w key
+            playerOneMovementVector = CGPoint(x: 0, y: playerMovementPerSecond)
+        case 1:
+            // S or s key
+            playerOneMovementVector = CGPoint(x: 0, y: playerMovementPerSecond *  -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }
@@ -87,7 +94,7 @@ class GameScene: SKScene {
         // Called before each frame is rendered
                 
         trackTimeElapsed(to: currentTime)
-        move(sprite: leftPlayer, velocity: CGPoint(x: 0, y: playerMovementPerSecond))
+        move(sprite: playerOne, velocity: playerOneMovementVector)
         
     }
 
@@ -100,7 +107,7 @@ class GameScene: SKScene {
         }
         // Log the time of this most recent time update
         lastUpdateTime = currentTime
-        print("\(deltaTime * 1000) milliseconds since last update")
+        //DEBUG: print("\(deltaTime * 1000) milliseconds since last update")
 
     }
     

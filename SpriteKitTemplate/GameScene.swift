@@ -85,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // Player nodes
     var playerOne: Player!
-//    var playerTwo: Player!
+    var playerTwo: Player!
     
     // Ball node
     var ball = GameElement()
@@ -111,6 +111,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Add the left-hand player (player one)
         playerOne = Player(size: CGSize(width: 25, height: 100), position: CGPoint(x: 50, y: self.size.height / 2 - 50))
         self.addChild(playerOne)
+
+        // Add the right-hand player (player two)
+        playerTwo = Player(size: CGSize(width: 25, height: 100), position: CGPoint(x: self.size.width - 50 - 25, y: self.size.height / 2 - 50))
+        self.addChild(playerTwo)
 
         // Add an edge loop body around the scene
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
@@ -175,12 +179,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case 1:
             // S or s key
             playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
-//        case 126:
-//            // Up arrow
-//            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
-//        case 125:
-//            // Down arrow
-//            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
+        case 126:
+            // Up arrow
+            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
+        case 125:
+            // Down arrow
+            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }
@@ -193,7 +197,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
         trackTimeElapsed(to: currentTime)
         move(sprite: playerOne)
-//        move(sprite: playerTwo)
+        move(sprite: playerTwo)
         move(sprite: ball)
 
     }

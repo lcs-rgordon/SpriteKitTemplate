@@ -89,8 +89,11 @@ class GameScene: SKScene {
         // Give the ball a physics body so contacts with other nodes can be handled
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.frame.width * 0.5)
                 
+        // Since it's a 2D ball, we don't need to rotate the sprite
+        ball.physicsBody?.allowsRotation = false
+
     }
-        
+    
     func touchDown(atPoint pos : CGPoint) {
 
     }

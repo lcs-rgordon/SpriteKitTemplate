@@ -12,9 +12,12 @@ import AVFoundation
 
 class GameElement: SKShapeNode {
     
-    // Will control which direction the shape moves in
+    // Will control where the shape moves to
     var velocity : CGPoint = CGPoint(x: 0, y: 0)
-        
+    
+    // Will control shape's speed
+    var coreSpeed: CGFloat = 0
+
     override init() {
         super.init()
     }
@@ -27,12 +30,15 @@ class GameElement: SKShapeNode {
 
 class Player: GameElement {
     
-    init(size: CGSize, position: CGPoint) {
+    init(size: CGSize, position: CGPoint, coreSpeed: CGFloat) {
         super.init()
         
         // Set properties required to define the size of this shape
         let rect = CGRect(origin: CGPoint.zero, size: size)
         self.path = CGPath(rect: rect, transform: nil)
+
+        // Set speed
+        self.coreSpeed = coreSpeed
         
         // Set position
         self.position = position
@@ -61,6 +67,42 @@ class Player: GameElement {
     
 }
 
+class Ball: GameElement {
+
+    init(radius: CGFloat, position: CGPoint, coreSpeed: CGFloat) {
+        super.init()
+        
+        // Set properties required to define the size of this shape
+        let rect = CGRect(origin: CGPoint.zero, size: CGSize(width: radius * 2, height: radius * 2))
+        self.path = CGPath(ellipseIn: rect, transform: nil)
+
+        // Set ball position
+        self.position = position
+        
+        // Color
+        self.fillColor = NSColor.white
+        
+        // Set speed
+        self.coreSpeed = coreSpeed
+        
+        // Set ball movement (down and to the right)
+        self.velocity = CGPoint(x: coreSpeed * -1, y: coreSpeed * -1)
+
+        // Give the ball a physics body so contacts with other nodes can be handled
+        self.physicsBody = SKPhysicsBody(circleOfRadius: radius,
+                                         center: CGPoint(x: radius, y: radius))
+        
+        // Since it's a 2D ball, we don't need to rotate the sprite
+        self.physicsBody?.allowsRotation = false
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
 // Define physics body categories so that we can...
 // 1. set what has the ability to collide with what
 // 2. find out when different combinations of physics bodies have collided
@@ -77,18 +119,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Background music player
     var backgroundMusic: AVAudioPlayer?
     
-    // Player movement properties
-    let playerMovementPerSecond: CGFloat = 150   // 150 points per second
-
-    // Ball movement properties
-    let ballMovementPerSecond: CGFloat = 200   // 200 points per second
-
     // Player nodes
     var playerOne: Player!
     var playerTwo: Player!
     
     // Ball node
-    var ball = GameElement()
+    var ball: Ball!
 
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
@@ -109,11 +145,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundMusic = nil
         
         // Add the left-hand player (player one)
-        playerOne = Player(size: CGSize(width: 25, height: 100), position: CGPoint(x: 50, y: self.size.height / 2 - 50))
+        playerOne = Player(size: CGSize(width: 25, height: 100),
+                           position: CGPoint(x: 50, y: self.size.height / 2 - 50),
+                           coreSpeed: 150)
         self.addChild(playerOne)
 
         // Add the right-hand player (player two)
-        playerTwo = Player(size: CGSize(width: 25, height: 100), position: CGPoint(x: self.size.width - 50 - 25, y: self.size.height / 2 - 50))
+        playerTwo = Player(size: CGSize(width: 25, height: 100),
+                           position: CGPoint(x: self.size.width - 50 - 25, y: self.size.height / 2 - 50),
+                           coreSpeed: 150)
         self.addChild(playerTwo)
 
         // Add an edge loop body around the scene
@@ -129,20 +169,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
 
         // Add a ball
-        ball = GameElement(circleOfRadius: 15)
-        ball.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
-        ball.fillColor = NSColor.white
+        ball = Ball(radius: 15.0,
+                    position: CGPoint(x: self.size.width / 2, y: self.size.height / 2),
+                    coreSpeed: 200)
         self.addChild(ball)
-        
-        // Set ball movement
-        // Diagonally to the bottom left of screen to start
-        ball.velocity = CGPoint(x: ballMovementPerSecond * -1, y: ballMovementPerSecond * -1)
-
-        // Give the ball a physics body so contacts with other nodes can be handled
-        ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.frame.width * 0.5)
-        
-        // Since it's a 2D ball, we don't need to rotate the sprite
-        ball.physicsBody?.allowsRotation = false
 
     }
     
@@ -175,16 +205,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         switch event.keyCode {
         case 13:
             // W or w key
-            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
+            playerOne.velocity = CGPoint(x: 0, y: playerOne.coreSpeed)
         case 1:
             // S or s key
-            playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
+            playerOne.velocity = CGPoint(x: 0, y: playerOne.coreSpeed * -1)
         case 126:
             // Up arrow
-            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
+            playerTwo.velocity = CGPoint(x: 0, y: playerTwo.coreSpeed)
         case 125:
             // Down arrow
-            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
+            playerTwo.velocity = CGPoint(x: 0, y: playerTwo.coreSpeed * -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }

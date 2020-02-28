@@ -15,6 +15,50 @@ class GameElement: SKShapeNode {
     // Will control which direction the shape moves in
     var velocity : CGPoint = CGPoint(x: 0, y: 0)
         
+    override init() {
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+class Player: GameElement {
+    
+    init(size: CGSize, position: CGPoint) {
+        super.init()
+        
+        // Set properties required to define the size of this shape
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        self.path = CGPath(rect: rect, transform: nil)
+        
+        // Set position
+        self.position = position
+        
+        // Set color
+        self.fillColor = NSColor.white
+
+        // Add a physics body to the player
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.frame.size, center: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2))
+
+        // Set physics body category
+        self.physicsBody?.categoryBitMask = PhysicsCategory.Player
+
+        // We handle collisions manually using the contact call back (didBegin) when the player hits the edge
+        // In other words, we don't want the physics engine to deal with the collision, we'll take care of it
+        self.physicsBody?.collisionBitMask = PhysicsCategory.None
+
+        // Register to get a callback when the player contacts the edge of the scene
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.Edge
+  
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }
 
 // Define physics body categories so that we can...
@@ -33,9 +77,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Background music player
     var backgroundMusic: AVAudioPlayer?
     
-    // Height of a player
-    let playerHeight: CGFloat = 100
-    
     // Player movement properties
     let playerMovementPerSecond: CGFloat = 150   // 150 points per second
 
@@ -43,8 +84,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let ballMovementPerSecond: CGFloat = 200   // 200 points per second
 
     // Player nodes
-    var playerOne: GameElement = GameElement()
-    var playerTwo: GameElement = GameElement()
+    var playerOne: Player!
+//    var playerTwo: Player!
     
     // Ball node
     var ball = GameElement()
@@ -68,30 +109,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundMusic = nil
         
         // Add the left-hand player (player one)
-        playerOne = GameElement(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
-        playerOne.position = CGPoint(x: 50, y: self.size.height / 2 - playerOne.frame.height / 2)
-        playerOne.fillColor = NSColor.white
+        playerOne = Player(size: CGSize(width: 25, height: 100), position: CGPoint(x: 50, y: self.size.height / 2 - 50))
         self.addChild(playerOne)
-        
-        // Add a physics body to the player
-        playerOne.physicsBody = SKPhysicsBody(rectangleOf: playerOne.frame.size, center: CGPoint(x: playerOne.frame.size.width / 2, y: playerHeight / 2))
-        
-        // Set physics body category
-        playerOne.physicsBody?.categoryBitMask = PhysicsCategory.Player
 
-        // We handle collisions manually using the contact call back (didBegin) when the player hits the edge
-        // In other words, we don't want the physics engine to deal with the collision, we'll take care of it
-        playerOne.physicsBody?.collisionBitMask = PhysicsCategory.None
-
-        // Register to get a callback when the player contacts the edge of the scene
-        playerOne.physicsBody?.contactTestBitMask = PhysicsCategory.Edge
-                
-        // Add the right-hand player (player two)
-        playerTwo = GameElement(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
-        playerTwo.position = CGPoint(x: self.size.width - 50 - playerOne.frame.width, y: self.size.height / 2 - playerTwo.frame.height / 2)
-        playerTwo.fillColor = NSColor.white
-        self.addChild(playerTwo)
-        
         // Add an edge loop body around the scene
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         
@@ -155,12 +175,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case 1:
             // S or s key
             playerOne.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
-        case 126:
-            // Up arrow
-            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
-        case 125:
-            // Down arrow
-            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
+//        case 126:
+//            // Up arrow
+//            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond)
+//        case 125:
+//            // Down arrow
+//            playerTwo.velocity = CGPoint(x: 0, y: playerMovementPerSecond * -1)
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         }
@@ -173,7 +193,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
         trackTimeElapsed(to: currentTime)
         move(sprite: playerOne)
-        move(sprite: playerTwo)
+//        move(sprite: playerTwo)
         move(sprite: ball)
 
     }

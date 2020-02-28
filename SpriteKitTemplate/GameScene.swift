@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-class Player: SKShapeNode {
+class GameElement: SKShapeNode {
     
     // Will control which direction the shape moves in
     var velocity : CGPoint = CGPoint(x: 0, y: 0)
@@ -26,14 +26,17 @@ class GameScene: SKScene {
     let playerHeight: CGFloat = 100
     
     // Player movement properties
-    let playerMovementPerSecond: CGFloat = 150   // 50 points per second
-    
+    let playerMovementPerSecond: CGFloat = 150   // 150 points per second
+
+    // Ball movement properties
+    let ballMovementPerSecond: CGFloat = 200   // 200 points per second
+
     // Player nodes
-    var playerOne: Player = Player()
-    var playerTwo: Player = Player()
+    var playerOne: GameElement = GameElement()
+    var playerTwo: GameElement = GameElement()
     
     // Ball node
-    var ball = SKShapeNode()
+    var ball = GameElement()
 
     // Track intervals between frame updates
     // See https://developer.apple.com/library/archive/documentation/GraphicsAnimation/Conceptual/SpriteKit_PG/Introduction/Introduction.html
@@ -54,14 +57,14 @@ class GameScene: SKScene {
         backgroundMusic = nil
         
         // Add the left-hand player (player one)
-        playerOne = Player(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
+        playerOne = GameElement(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
         playerOne.position = CGPoint(x: 50, y: self.size.height / 2 - playerOne.frame.height / 2)
         playerOne.fillColor = NSColor.white
         self.addChild(playerOne)
         print(playerOne.position.y)
         
         // Add the right-hand player (player two)
-        playerTwo = Player(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
+        playerTwo = GameElement(rect: CGRect(x: 0, y: 0, width: 25, height: playerHeight))
         playerTwo.position = CGPoint(x: self.size.width - 50 - playerOne.frame.width, y: self.size.height / 2 - playerTwo.frame.height / 2)
         playerTwo.fillColor = NSColor.white
         self.addChild(playerTwo)
@@ -74,22 +77,18 @@ class GameScene: SKScene {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
 
         // Add a ball
-        ball = SKShapeNode(circleOfRadius: 15)
+        ball = GameElement(circleOfRadius: 15)
         ball.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
         ball.fillColor = NSColor.white
         self.addChild(ball)
+        
+        // Set ball movement
+        // Diagonally to the bottom left of screen to start
+        ball.velocity = CGPoint(x: ballMovementPerSecond * -1, y: ballMovementPerSecond * -1)
 
-        // Give the ball a physics body
+        // Give the ball a physics body so contacts with other nodes can be handled
         ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.frame.width * 0.5)
-        
-        // Ball does not lose any momentum when hitting edge of scene
-        ball.physicsBody?.restitution = 1.0
-        print(ball.physicsBody?.mass)
-        
-        // Move the ball
-        let initialMovement = SKAction.applyImpulse(CGVector(dx: -10, dy: -10), duration: 0.001)
-        ball.run(initialMovement)
-
+                
     }
         
     func touchDown(atPoint pos : CGPoint) {
@@ -146,6 +145,7 @@ class GameScene: SKScene {
         move(sprite: playerOne)
         checkForBoundaryReversal(on: playerTwo)
         move(sprite: playerTwo)
+        move(sprite: ball)
 
     }
 
@@ -162,10 +162,10 @@ class GameScene: SKScene {
 
     }
     
-    // Move the player's paddle by a fraction of the desired movement per second, based on time since last frame draw
-    func move(sprite: Player) {
+    // Move the game element by a fraction of the desired movement per second, based on time since last frame draw
+    func move(sprite: GameElement) {
         
-        // How much of the desired movement in a second should the player move for this frame?
+        // How much of the desired movement in a second should the game element move for this frame?
         let amountToMove = CGPoint(x: sprite.velocity.x * CGFloat(deltaTime), y: sprite.velocity.y * CGFloat(deltaTime))
         
         // Actually move the sprite
@@ -175,7 +175,7 @@ class GameScene: SKScene {
     }
     
     // This checks to see if a player is at the upper or lower boundary, and if so, reverses their movement vector
-    func checkForBoundaryReversal(on player: Player) {
+    func checkForBoundaryReversal(on player: GameElement) {
         
         // Top of screen, change to moving down
         // OR
